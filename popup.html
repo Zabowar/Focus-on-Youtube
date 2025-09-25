@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YouTube Customizer</title>
+    <link rel="stylesheet" href="style.css?v=1.1" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <main>
+      <div class="header">
+        <img src="icon/icon64.png" alt="Focus on YouTube icon"/>
+        <h1>Focus on YouTube</h1>
+      </div>
+      <form id="settingsForm">
+        <div>
+          <label class="toggle">
+            <input type="checkbox" id="enableTimer">
+            <span class="slider"></span>
+            Scroll timer :
+          </label>
+          <input type="number" id="scrollTimer" name="scrollTimer" min="0" max="60" value="0" />
+          <p>minutes</p>
+        </div>
+        <div>
+          <label class="toggle"><input type="checkbox" id="filterShorts"><span class="slider"></span> Masquer les Shorts</label>
+          <br>
+          <label class="toggle"><input type="checkbox" id="hideThumbnails"><span class="slider"></span> Masquer les miniatures</label>
+          <label class="toggle"><input type="checkbox" id="hideComments"><span class="slider"></span> Masquer les commentaires</label>
+          <label class="toggle"><input type="checkbox" id="hideSuggestions"><span class="slider"></span> Masquer les suggestions</label>
+        </div>
+        <br>
+        <div>
+          <button type="button" id="saveBtn">Sauvegarder</button>
+          <button type="button" id="resetBtn">Réinitialiser</button>
+        </div>
+      </form>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>
