@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "author": "Pierre-Alexis Gatté",
     "name": "Focus on YouTube",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Améliore ta productivité sur YouTube en limitant les shorts et en retirant les miniatures, les vidéos et les commentaires.",
     "icons": {
         "32": "icon/icon32.png",
@@ -31,4 +31,5 @@
             "run_at": "document_end"
         }
     ]
+
 }
