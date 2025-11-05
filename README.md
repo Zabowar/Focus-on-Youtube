@@ -10,7 +10,7 @@
 
 ### ✨ Features
 
-- ⏱️ **YouTube Shorts timer**: automatically returns you to the homepage after a defined amount of time.  
+- ⏱️ **YouTube Shorts timer** : automatically returns you to the homepage after a defined amount of time.  
 - 🚫 **Completely remove Shorts** (still watchable as regular videos).  
 - 🖼️ **Hide thumbnails**.  
 - 💬 **Hide comments**.  
