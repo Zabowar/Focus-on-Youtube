@@ -23,6 +23,12 @@ function hideElements(selectors) {
   });
 }
 
+function showElements(selectors) {
+  selectors.forEach((sel) => {
+    document.querySelectorAll(sel).forEach((el) => (el.style.display = ""));
+  });
+}
+
 function getOrCreateStyleElement() {
   let style = document.getElementById("yt-custom-style");
   if (!style) {
@@ -41,6 +47,7 @@ function applyHides({
 } = {}) {
   const styleElement = getOrCreateStyleElement();
   let customCss = "";
+
   if (filterShorts) {
     const sidebarShorts = document.querySelector('a#endpoint[title="Shorts"]');
     if (sidebarShorts) sidebarShorts.style.display = "none";
@@ -59,11 +66,8 @@ function applyHides({
       "grid-shelf-view-model",
       'yt-chip-cloud-chip-renderer[title="Shorts"]',
     ];
-    selectors.forEach((sel) => {
-      document.querySelectorAll(sel).forEach((el) => {
-        el.style.display = "none";
-      });
-    });
+    hideElements(selectors);
+
     document
       .querySelectorAll("ytd-rich-shelf-renderer span#title")
       .forEach((span) => {
@@ -72,6 +76,7 @@ function applyHides({
           if (parent) parent.style.display = "none";
         }
       });
+
     if (window.location.href.includes("/shorts/")) {
       const match = window.location.href.match(/shorts\/([\w-]+)/);
       if (match && match[1]) {
@@ -101,9 +106,10 @@ function applyHides({
   }
 
   if (hideSuggestions) {
-    const isHomepage = location.pathname === "/";
+    const currentPath = location.pathname;
+    const urlParams = new URLSearchParams(window.location.search);
 
-    if (isHomepage) {
+    if (currentPath === "/") {
       const homepageElements = [
         "ytd-rich-grid-renderer",
         "ytd-rich-item-renderer",
@@ -113,14 +119,15 @@ function applyHides({
       hideElements(homepageElements);
     }
 
-    if (location.pathname.startsWith("/watch")) {
-      const urlParams = new URLSearchParams(window.location.search);
+    if (currentPath.startsWith("/watch")) {
       const isPlaylistActive = urlParams.has("list");
 
       if (isPlaylistActive) {
         hideElements(["#related"]);
+        showElements(["#secondary"]);
       } else {
         hideElements(["#secondary"]);
+        showElements(["#related"]);
       }
     }
   }
@@ -135,6 +142,7 @@ function applyHides({
       }
     `;
   }
+
   styleElement.textContent = customCss;
 }
 
@@ -181,18 +189,24 @@ async function main() {
     "hideSuggestions",
     "hideThumbnails",
   ]);
+
   const options = {
     filterShorts: data.filterShorts === true,
     hideComments: data.hideComments === true,
     hideSuggestions: data.hideSuggestions === true,
     hideThumbnails: data.hideThumbnails === true,
   };
+
   applyHides(options);
+
   if (data.enableTimer === true && data.scrollTimer > 0) {
     handleScrollTimerBasedOnLocation(data.scrollTimer * 60);
   }
+
   const observer = new MutationObserver(() => applyHides(options));
   observer.observe(document.body, { childList: true, subtree: true });
+
+  window.addEventListener("yt-navigate-finish", () => applyHides(options));
 }
 
 main();
