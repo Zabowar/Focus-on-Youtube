@@ -117,7 +117,7 @@ function applyHides({
     }
     if (location.pathname.startsWith('/watch')) {
       const playlistPanel = document.querySelector('ytd-playlist-panel-renderer');
-      const hasPlaylistItems = playlistPanel && playlistPanel.querySelector('ytd-playlist-panel-video-renderer');
+      const hasPlaylistItems = playlistPanel && playlistPanel.querySelector('ytd-playlist-panel-renderer');
       if (hasPlaylistItems) {
           const suggestionOnlyElements = [
               'ytd-watch-next-secondary-results-renderer',
@@ -199,3 +199,4 @@ async function main() {
 }
 
 main();
+
