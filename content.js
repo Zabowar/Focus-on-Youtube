@@ -102,7 +102,6 @@ function applyHides({
 
   if (hideSuggestions) {
     const isHomepage = location.pathname === "/";
-    const isWatchPage = location.pathname.startsWith("/watch");
 
     if (isHomepage) {
       const homepageElements = [
@@ -114,25 +113,14 @@ function applyHides({
       hideElements(homepageElements);
     }
 
-    if (isWatchPage) {
-      const playlistPanel = document.querySelector(
-        "ytd-playlist-panel-renderer",
-      );
+    if (location.pathname.startsWith("/watch")) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isPlaylistActive = urlParams.has("list");
 
-      if (playlistPanel) {
-        const suggestions = document.querySelector("#related");
-        if (suggestions) {
-          suggestions.style.display = "none";
-        }
-
-        playlistPanel.style.display = "block";
+      if (isPlaylistActive) {
+        hideElements(["#related"]);
       } else {
-        const watchPageElements = [
-          "#related",
-          "#secondary",
-          "ytd-watch-next-secondary-results-renderer",
-        ];
-        hideElements(watchPageElements);
+        hideElements(["#secondary"]);
       }
     }
   }
