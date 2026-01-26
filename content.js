@@ -1,9 +1,9 @@
-if (location.pathname.startsWith('/shorts')) {
-  location.href = 'https://www.youtube.com';
+if (location.pathname.startsWith("/shorts")) {
+  location.href = "https://www.youtube.com";
 }
 
 function waitForElm(selector) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     const el = document.querySelector(selector);
     if (el) return resolve(el);
     const observer = new MutationObserver(() => {
@@ -18,16 +18,16 @@ function waitForElm(selector) {
 }
 
 function hideElements(selectors) {
-  selectors.forEach(sel => {
-    document.querySelectorAll(sel).forEach(el => (el.style.display = 'none'));
+  selectors.forEach((sel) => {
+    document.querySelectorAll(sel).forEach((el) => (el.style.display = "none"));
   });
 }
 
 function getOrCreateStyleElement() {
-  let style = document.getElementById('yt-custom-style');
+  let style = document.getElementById("yt-custom-style");
   if (!style) {
-    style = document.createElement('style');
-    style.id = 'yt-custom-style';
+    style = document.createElement("style");
+    style.id = "yt-custom-style";
     document.head.appendChild(style);
   }
   return style;
@@ -37,37 +37,41 @@ function applyHides({
   filterShorts = false,
   hideComments = false,
   hideSuggestions = false,
-  hideThumbnails = false
-} = {}) { 
+  hideThumbnails = false,
+} = {}) {
   const styleElement = getOrCreateStyleElement();
-  let customCss = '';
+  let customCss = "";
   if (filterShorts) {
     const sidebarShorts = document.querySelector('a#endpoint[title="Shorts"]');
-    if (sidebarShorts) sidebarShorts.style.display = 'none';
-    document.querySelectorAll('ytd-rich-item-renderer, ytd-video-renderer').forEach(el => {
-      if (el.querySelector('a[href*="/shorts/"]')) {
-        el.style.display = 'none';
-      }
-    });
+    if (sidebarShorts) sidebarShorts.style.display = "none";
+    document
+      .querySelectorAll("ytd-rich-item-renderer, ytd-video-renderer")
+      .forEach((el) => {
+        if (el.querySelector('a[href*="/shorts/"]')) {
+          el.style.display = "none";
+        }
+      });
     const selectors = [
       'yt-tab-shape[tab-title="Shorts"]',
-      'ytd-rich-shelf-renderer[is-shorts]',
-      'ytd-reel-shelf-renderer',
-      'ytd-reel-item-renderer',
-      'grid-shelf-view-model',
-      'yt-chip-cloud-chip-renderer[title="Shorts"]'
+      "ytd-rich-shelf-renderer[is-shorts]",
+      "ytd-reel-shelf-renderer",
+      "ytd-reel-item-renderer",
+      "grid-shelf-view-model",
+      'yt-chip-cloud-chip-renderer[title="Shorts"]',
     ];
-    selectors.forEach(sel => {
-      document.querySelectorAll(sel).forEach(el => {
-        el.style.display = 'none';
+    selectors.forEach((sel) => {
+      document.querySelectorAll(sel).forEach((el) => {
+        el.style.display = "none";
       });
     });
-    document.querySelectorAll('ytd-rich-shelf-renderer span#title').forEach(span => {
-      if (span.textContent.trim() === 'Shorts') {
-        const parent = span.closest('ytd-rich-shelf-renderer');
-        if (parent) parent.style.display = 'none';
-      }
-    });
+    document
+      .querySelectorAll("ytd-rich-shelf-renderer span#title")
+      .forEach((span) => {
+        if (span.textContent.trim() === "Shorts") {
+          const parent = span.closest("ytd-rich-shelf-renderer");
+          if (parent) parent.style.display = "none";
+        }
+      });
     if (window.location.href.includes("/shorts/")) {
       const match = window.location.href.match(/shorts\/([\w-]+)/);
       if (match && match[1]) {
@@ -92,46 +96,47 @@ function applyHides({
   }
 
   if (hideComments) {
-    const comments = document.querySelector('ytd-comments');
-    if (comments) comments.style.display = 'none';
+    const comments = document.querySelector("ytd-comments");
+    if (comments) comments.style.display = "none";
   }
 
   if (hideSuggestions) {
-    const isHomepage = location.pathname === '/';
-    const watchPage = location.pathname.startsWith('/watch');
-    const homepageElements = [
-        'ytd-rich-grid-renderer',
-        'ytd-rich-item-renderer',
-        '#contents ytd-rich-grid-row',
-        '#contents ytd-rich-shelf-renderer'
-    ];
-    const watchPageElements = [
-      '#related',
-      '#secondary',
-      'ytd-watch-next-secondary-results-renderer',
-      'ytd-compact-video-renderer',
-      'ytd-vertical-list-renderer'
-    ];
+    const isHomepage = location.pathname === "/";
+    const isWatchPage = location.pathname.startsWith("/watch");
+
     if (isHomepage) {
-        hideElements(homepageElements);
+      const homepageElements = [
+        "ytd-rich-grid-renderer",
+        "ytd-rich-item-renderer",
+        "#contents ytd-rich-grid-row",
+        "#contents ytd-rich-shelf-renderer",
+      ];
+      hideElements(homepageElements);
     }
-    if (location.pathname.startsWith('/watch')) {
-      const playlistPanel = document.querySelector('ytd-playlist-panel-renderer');
-      const hasPlaylistItems = playlistPanel && playlistPanel.querySelector('ytd-playlist-panel-renderer');
-      if (hasPlaylistItems) {
-          const suggestionOnlyElements = [
-              'ytd-watch-next-secondary-results-renderer',
-              'ytd-compact-video-renderer',
-              'ytd-vertical-list-renderer'
-          ];
-          hideElements(suggestionOnlyElements);
-      }
-      else {
-          hideElements(watchPageElements);
+
+    if (isWatchPage) {
+      const playlistPanel = document.querySelector(
+        "ytd-playlist-panel-renderer",
+      );
+
+      if (playlistPanel) {
+        const suggestions = document.querySelector("#related");
+        if (suggestions) {
+          suggestions.style.display = "none";
+        }
+
+        playlistPanel.style.display = "block";
+      } else {
+        const watchPageElements = [
+          "#related",
+          "#secondary",
+          "ytd-watch-next-secondary-results-renderer",
+        ];
+        hideElements(watchPageElements);
       }
     }
   }
-  
+
   if (hideThumbnails) {
     customCss += `
       ytd-thumbnail img,
@@ -157,18 +162,18 @@ function handleScrollTimerBasedOnLocation(durationSec) {
   const startTimer = () => {
     clearExistingTimer();
     timerId = setTimeout(() => {
-      if (location.pathname.startsWith('/shorts')) {
-        window.location.href = 'https://www.youtube.com';
+      if (location.pathname.startsWith("/shorts")) {
+        window.location.href = "https://www.youtube.com";
       }
     }, durationSec * 1000);
   };
-  if (previousPath.startsWith('/shorts')) {
+  if (previousPath.startsWith("/shorts")) {
     startTimer();
   }
   setInterval(() => {
     if (location.pathname !== previousPath) {
-      const wasShorts = previousPath.startsWith('/shorts');
-      const isShorts = location.pathname.startsWith('/shorts');
+      const wasShorts = previousPath.startsWith("/shorts");
+      const isShorts = location.pathname.startsWith("/shorts");
       previousPath = location.pathname;
       if (isShorts && !wasShorts) {
         startTimer();
@@ -181,14 +186,18 @@ function handleScrollTimerBasedOnLocation(durationSec) {
 
 async function main() {
   const data = await chrome.storage.sync.get([
-    'scrollTimer', 'enableTimer',
-    'filterShorts', 'hideComments', 'hideSuggestions', 'hideThumbnails'
+    "scrollTimer",
+    "enableTimer",
+    "filterShorts",
+    "hideComments",
+    "hideSuggestions",
+    "hideThumbnails",
   ]);
   const options = {
     filterShorts: data.filterShorts === true,
     hideComments: data.hideComments === true,
     hideSuggestions: data.hideSuggestions === true,
-    hideThumbnails: data.hideThumbnails === true
+    hideThumbnails: data.hideThumbnails === true,
   };
   applyHides(options);
   if (data.enableTimer === true && data.scrollTimer > 0) {
@@ -199,4 +208,3 @@ async function main() {
 }
 
 main();
-
